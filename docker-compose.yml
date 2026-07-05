@@ -1,0 +1,31 @@
+version: '3.8'
+
+services:
+  mercur-api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: mercur-api
+    environment:
+      - DATABASE_URL=postgres://carl:jackchen1984@infradb-shared-fi5pyt_postgres:5432/mercur
+      - REDIS_URL=redis://infradb-shared-fi5pyt_valkey:6379
+      - JWT_SECRET=supersecret
+      - COOKIE_SECRET=supersecret
+      - STORE_CORS=http://localhost:3000
+      - ADMIN_CORS=http://localhost:7000
+      - VENDOR_CORS=http://localhost:7001
+      - AUTH_CORS=http://localhost:3000,http://localhost:7000,http://localhost:7001
+    ports:
+      - "9000:9000"
+    networks:
+      - dokploy-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "bun", "run", "healthcheck"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+networks:
+  dokploy-network:
+    external: true
