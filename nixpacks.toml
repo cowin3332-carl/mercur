@@ -1,0 +1,11 @@
+# Nixpacks configuration for Mercur marketplace (MedusaJS v2)
+# https://nixpacks.com/docs/config/file
+
+[phases.setup]
+nixPkgs = ["nodejs_20", "bun"]
+
+[phases.install]
+cmds = ["bun install --frozen-lockfile"]
+
+[start]
+cmd = "cd apps/api && bun run medusa db:migrate && bun run start"
