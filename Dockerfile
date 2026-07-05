@@ -6,6 +6,8 @@ WORKDIR /app
 # Copy package files
 COPY package.json bun.lock* turbo.json ./
 COPY apps/api/package.json ./apps/api/
+COPY apps/admin-test/package.json ./apps/admin-test/
+COPY apps/vendor/package.json ./apps/vendor/
 COPY packages/core/package.json ./packages/core/
 COPY packages/cli/package.json ./packages/cli/
 COPY packages/client/package.json ./packages/client/
@@ -13,7 +15,12 @@ COPY packages/types/package.json ./packages/types/
 COPY packages/dashboard-sdk/package.json ./packages/dashboard-sdk/
 COPY packages/dashboard-shared/package.json ./packages/dashboard-shared/
 COPY packages/registry/package.json ./packages/registry/
+COPY packages/admin/package.json ./packages/admin/
+COPY packages/vendor/package.json ./packages/vendor/
+COPY packages/create-mercur-app/package.json ./packages/create-mercur-app/
+COPY packages/docs/package.json ./packages/docs/
 COPY packages/providers/payout-stripe-connect/package.json ./packages/providers/payout-stripe-connect/
+COPY integration-tests/package.json ./integration-tests/
 
 # Install dependencies
 RUN bun install --frozen-lockfile

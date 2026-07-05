@@ -2,9 +2,7 @@ version: '3.8'
 
 services:
   mercur-api:
-    build:
-      context: .
-      dockerfile: Dockerfile
+    image: mercur-api:latest
     container_name: mercur-api
     environment:
       - DATABASE_URL=postgres://carl:jackchen1984@infradb-shared-fi5pyt_postgres:5432/mercur
@@ -21,7 +19,7 @@ services:
       - dokploy-network
     restart: unless-stopped
     healthcheck:
-      test: ["CMD", "bun", "run", "healthcheck"]
+      test: ["CMD", "bash", "/usr/local/bin/healthcheck.sh"]
       interval: 30s
       timeout: 10s
       retries: 3
