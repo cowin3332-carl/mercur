@@ -6,15 +6,6 @@ dist
 .medusa
 .vite
 .turbo
-apps/admin-test
-apps/vendor
-apps/docs
-packages/admin
-packages/vendor
-packages/docs
-packages/create-mercur-app
-packages/registry
-
 docs
 scripts
 .github
