@@ -14,7 +14,7 @@ packages/vendor
 packages/docs
 packages/create-mercur-app
 packages/registry
-integration-tests
+
 docs
 scripts
 .github
