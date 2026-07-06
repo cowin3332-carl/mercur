@@ -1,7 +1,4 @@
-FROM node:20-bookworm-slim AS builder
-
-RUN curl -fsSL https://bun.sh/install | bash
-ENV PATH="/root/.bun/bin:${PATH}"
+FROM oven/bun:latest AS builder
 
 WORKDIR /app
 
@@ -32,14 +29,7 @@ COPY . .
 
 RUN cd apps/api && bun run build
 
-FROM node:20-bookworm-slim AS production
-
-RUN apt-get update && apt-get install -y --no-install-recommends \
-    curl && \
-    rm -rf /var/lib/apt/lists/*
-
-RUN curl -fsSL https://bun.sh/install | bash
-ENV PATH="/root/.bun/bin:${PATH}"
+FROM oven/bun:latest AS production
 
 WORKDIR /app
 
@@ -60,6 +50,6 @@ ENV NODE_ENV=production
 EXPOSE 9000
 
 HEALTHCHECK --interval=30s --timeout=5s --start-period=30s --retries=3 \
-    CMD curl -f http://localhost:9000/health || exit 1
+    CMD bun -e "fetch('http://localhost:9000/health').then(r => {if (!r.ok) process.exit(1)}).catch(() => process.exit(1))"
 
 CMD ["sh", "-c", "cd apps/api && bun run seed && bun run start"]
