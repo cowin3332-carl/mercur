@@ -43,10 +43,11 @@ COPY --from=builder /app/packages/providers ./packages/providers
 COPY --from=builder /app/package.json ./
 
 ENV NODE_ENV=production
+ENV NODE_OPTIONS="--no-experimental-strip-types"
 
 EXPOSE 9000
 
 HEALTHCHECK --interval=30s --timeout=5s --start-period=30s --retries=3 \
     CMD bun -e "fetch('http://localhost:9000/health').then(r => {if (!r.ok) process.exit(1)}).catch(() => process.exit(1))"
 
-CMD ["sh", "-c", "cd apps/api && bun run seed && bun run start"]
+CMD ["sh", "-c", "cd apps/api && bun run start"]
