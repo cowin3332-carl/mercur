@@ -2,7 +2,7 @@ FROM oven/bun:latest AS builder
 
 WORKDIR /app
 
-COPY package.json bun.lock* turbo.json ./
+COPY package.json bun.lock* ./
 COPY apps/api/package.json ./apps/api/
 COPY apps/admin-test/package.json ./apps/admin-test/
 COPY apps/vendor/package.json ./apps/vendor/
@@ -27,8 +27,6 @@ RUN bun install --frozen-lockfile
 
 COPY . .
 
-RUN cd apps/api && bun run build
-
 FROM oven/bun:latest AS production
 
 WORKDIR /app
@@ -43,7 +41,6 @@ COPY --from=builder /app/packages/dashboard-sdk ./packages/dashboard-sdk
 COPY --from=builder /app/packages/dashboard-shared ./packages/dashboard-shared
 COPY --from=builder /app/packages/providers ./packages/providers
 COPY --from=builder /app/package.json ./
-COPY --from=builder /app/turbo.json ./
 
 ENV NODE_ENV=production
 
