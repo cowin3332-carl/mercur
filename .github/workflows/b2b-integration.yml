@@ -1,0 +1,65 @@
+name: Mercur B2B integration
+on:
+  pull_request:
+    paths:
+      - 'projects/b2b/**'
+      - '.github/workflows/b2b-integration.yml'
+  push:
+    branches: ['codex/mercur-b2b-integration']
+    paths:
+      - 'projects/b2b/**'
+      - '.github/workflows/b2b-integration.yml'
+permissions:
+  contents: read
+jobs:
+  integration:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    services:
+      postgres:
+        image: postgres:16-alpine
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: mercur_b2b
+        ports: ['5433:5432']
+        options: >-
+          --health-cmd 'pg_isready -U postgres -d mercur_b2b'
+          --health-interval 5s --health-timeout 5s --health-retries 20
+    defaults:
+      run:
+        working-directory: projects/b2b
+    env:
+      MEDUSA_DISABLE_TELEMETRY: 'true'
+      NEXT_TELEMETRY_DISABLED: '1'
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 11.25.0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: pnpm
+          cache-dependency-path: projects/b2b/pnpm-lock.yaml
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm typecheck
+      - name: Configure integration fixture
+        run: |
+          pnpm setup
+          node --input-type=module <<'JS'
+          import { readFileSync, writeFileSync } from 'node:fs'
+          const path = 'apps/backend/.env'
+          const content = readFileSync(path, 'utf8').replace(/^DATABASE_URL=.*$/m, 'DATABASE_URL=postgres://postgres:postgres@localhost:5433/mercur_b2b').replace('DISABLE_ADMIN=false', 'DISABLE_ADMIN=true')
+          writeFileSync(path, content)
+          JS
+      - run: pnpm db:migrate
+      - run: pnpm seed
+      - run: node scripts/sync-key.mjs
+      - name: API flow, SSR pages and production storefront build
+        run: node scripts/verify.mjs --build
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: mercur-b2b-validation
+          path: projects/b2b/.local/

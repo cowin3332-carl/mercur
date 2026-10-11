@@ -1,0 +1,13 @@
+node_modules/
+.env
+.env.local
+.env.*.local
+.next/
+.medusa/
+.turbo/
+dist/
+coverage/
+.local/
+*.log
+
+.local-seed.json

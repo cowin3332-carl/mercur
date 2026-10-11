@@ -1,0 +1,22 @@
+packages:
+  - "apps/*"
+allowBuilds:
+  '@medusajs/telemetry': false
+  '@swc/core': true
+  esbuild: true
+  msgpackr-extract: true
+  protobufjs: true
+  sharp: true
+  unrs-resolver: true
+packageExtensions:
+  '@mercurjs/core@2.3.7':
+    dependencies:
+      '@medusajs/core-flows': '2.21.2'
+      '@mercurjs/types': '2.3.7'
+      http-proxy-middleware: '3.0.7'
+      cors: '2.8.5'
+      jsonwebtoken: '9.0.3'
+      multer: '2.0.2'
+overrides:
+  '@types/react': '19.0.5'
+  '@types/react-dom': '19.0.5'
