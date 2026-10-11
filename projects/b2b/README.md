@@ -22,7 +22,7 @@
 
 ```bash
 pnpm install --frozen-lockfile
-pnpm setup
+pnpm run setup
 docker compose up -d --wait
 pnpm db:migrate
 pnpm seed
@@ -36,7 +36,7 @@ pnpm dev
 - Medusa 管理后台：http://localhost:9000/app
 - API：http://localhost:9000
 
-管理账户邮箱默认 `admin@example.test`，随机密码保存在 `apps/backend/.env` 的 `DEMO_ADMIN_PASSWORD`，不进入 Git。`pnpm setup` 不覆盖已有配置。
+管理账户邮箱默认 `admin@example.test`，随机密码保存在 `apps/backend/.env` 的 `DEMO_ADMIN_PASSWORD`，不进入 Git。`pnpm run setup` 不覆盖已有配置。
 
 前台注册时创建企业，并由服务端将注册人绑定为该企业管理员。已有客户不能再自建另一家企业。
 

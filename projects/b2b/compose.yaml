@@ -3,7 +3,7 @@ services:
     image: postgres:16-alpine
     environment:
       POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?Run pnpm setup first}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?Run pnpm run setup first}
       POSTGRES_DB: mercur_b2b
     ports:
       - "127.0.0.1:5433:5432"

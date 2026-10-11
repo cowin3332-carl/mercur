@@ -16,7 +16,7 @@ export default async function seed({ container }: { container: MedusaContainer }
   const admins = await container.resolve(Modules.USER).listUsers({ email: adminEmail });
   if (!admins.length) {
     const password = process.env.DEMO_ADMIN_PASSWORD;
-    if (!password) throw new Error("Run pnpm setup to generate DEMO_ADMIN_PASSWORD");
+    if (!password) throw new Error("Run pnpm run setup to generate DEMO_ADMIN_PASSWORD");
     const { authIdentity, error } = await auth.register("emailpass", { body: { email: adminEmail, password } });
     if (!authIdentity || error) throw new Error(error || "Cannot create admin identity");
     await createUserAccountWorkflow(container).run({ input: { authIdentityId: authIdentity.id, userData: { email: adminEmail } } });
@@ -26,7 +26,7 @@ export default async function seed({ container }: { container: MedusaContainer }
   let seller = sellers[0];
   if (!seller) {
     const password = process.env.DEMO_SELLER_PASSWORD;
-    if (!password) throw new Error("Run pnpm setup to generate DEMO_SELLER_PASSWORD");
+    if (!password) throw new Error("Run pnpm run setup to generate DEMO_SELLER_PASSWORD");
     const registration = await auth.register("emailpass", { body: { email: sellerEmail, password } });
     let authId = registration.authIdentity?.id;
     if (!authId) {
